@@ -121,9 +121,10 @@ int& Vector::operator[](int index)
 Vector Vector::operator+(const Vector& v)
 {
 	int sizeLess = m_size < v.m_size ? m_size : v.m_size;	// Вычисляем вектор с меньшей размерностью.
-	int size = m_size > v.m_size ? m_size : v.m_size;		// Вычисляем вектор с большей размерностью.
-	Vector result{ size };
-	for (size_t i = 0; i < size; i++)
+	int sizeBigger = m_size > v.m_size ? m_size : v.m_size;		// Вычисляем вектор с большей размерностью.
+	Vector result{ sizeBigger };
+	result.Clear();
+	for (int i = 0; i < sizeBigger; i++)
 		if (i >= sizeLess)
 		{
 			result[i] = (*(this->m_vect + i)) > (*(v.GetVect() + i)) ? (*(this->m_vect + i)) : (*(v.GetVect() + i)); // иногда копирует из мусора положительные числа.
@@ -132,6 +133,54 @@ Vector Vector::operator+(const Vector& v)
 			result[i] = *(this->m_vect + i) + *(v.GetVect() + i);
 
 	return result;
+}
+
+// Сложение вектора с числом (каждый компонент вектора складывается с числом).
+Vector Vector::operator+(int n)
+{
+	Vector result{ m_size };
+	result.Clear();
+	for (int i = 0; i < m_size; i++)
+		result[i] = (*(this->m_vect + i)) + n;
+	return result;
+}
+
+// Перегруженный оператор += для сложения двух векторов.
+Vector& Vector::operator+=(const Vector& v)
+{
+	// При записи из большего в меньший происходит потеря данных(отсекание от меньшего индекса до большего).
+	*this = this->operator+(v);
+
+	return *this;
+}
+
+// Вычитание двух векторов.
+Vector Vector::operator-(const Vector& v)
+{
+	int sizeLess = m_size < v.m_size ? m_size : v.m_size;	// Вычисляем вектор с меньшей размерностью.
+	int sizeBigger = m_size > v.m_size ? m_size : v.m_size;		// Вычисляем вектор с большей размерностью.
+	Vector result{ sizeBigger };
+	result.Clear();
+	for (int i = 0; i < sizeBigger; i++)
+		if (i >= sizeLess)
+		{
+			result[i] = (*(this->m_vect + i)) > (*(v.GetVect() + i)) ? (*(this->m_vect + i)) : (*(v.GetVect() + i)); // иногда копирует из мусора положительные числа.
+		}
+		else
+			result[i] = *(this->m_vect + i) + *(v.GetVect() + i);
+
+	return result;
+
+
+
+
+
+
+
+
+
+
+	return Vector();
 }
 
 // Метод вывода на экран.
