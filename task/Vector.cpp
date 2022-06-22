@@ -40,6 +40,15 @@ Vector::Vector(const Vector& v)
 	m_size = v.GetSize();
 }
 
+// Реализация семантики переноса с использованием r-value ссылок.
+// Конструктор переноса.
+Vector::Vector(Vector&& v)
+{
+	m_vect = v.m_vect;
+	m_size = v.m_size;
+	v.m_vect = nullptr;
+}
+
 // Деструктор.
 Vector::~Vector()
 {
@@ -93,6 +102,19 @@ Vector& Vector::operator=(const Vector& v)
 	{
 		this->m_vect[i] = v.m_vect[i];
 	}
+	return *this;
+}
+
+// Реализация семантики переноса с использованием r-value ссылок.
+// Перегруженный оператор присваивания с переносом.
+Vector& Vector::operator=(Vector&& v)
+{
+	if (this == &v)
+		return *this;
+	delete m_vect;
+	m_vect = v.m_vect;
+	v.m_vect = nullptr;
+
 	return *this;
 }
 
