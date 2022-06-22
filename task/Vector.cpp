@@ -1,5 +1,4 @@
-﻿#include <stdlib.h>
-#include <iostream>
+﻿#include <iostream>
 #include "Vector.h"
 using std::cout;
 using std::endl;
@@ -121,13 +120,13 @@ int& Vector::operator[](int index)
 Vector Vector::operator+(const Vector& v)
 {
 	int sizeLess = m_size < v.m_size ? m_size : v.m_size;	// Вычисляем вектор с меньшей размерностью.
-	int sizeBigger = m_size > v.m_size ? m_size : v.m_size;		// Вычисляем вектор с большей размерностью.
+	int sizeBigger = m_size > v.m_size ? m_size : v.m_size;	// Вычисляем вектор с большей размерностью.
 	Vector result{ sizeBigger };
 	result.Clear();
 	for (int i = 0; i < sizeBigger; i++)
 		if (i >= sizeLess)
 		{
-			result[i] = (*(this->m_vect + i)) > (*(v.GetVect() + i)) ? (*(this->m_vect + i)) : (*(v.GetVect() + i)); // иногда копирует из мусора положительные числа.
+			result[i] = (*(this->m_vect + i)) > (*(v.GetVect() + i)) ? (*(this->m_vect + i)) : (*(v.GetVect() + i));
 		}
 		else
 			result[i] = *(this->m_vect + i) + *(v.GetVect() + i);
@@ -148,7 +147,6 @@ Vector Vector::operator+(int n)
 // Перегруженный оператор += для сложения двух векторов.
 Vector& Vector::operator+=(const Vector& v)
 {
-	// При записи из большего в меньший происходит потеря данных(отсекание от меньшего индекса до большего).
 	*this = this->operator+(v);
 
 	return *this;
@@ -158,29 +156,68 @@ Vector& Vector::operator+=(const Vector& v)
 Vector Vector::operator-(const Vector& v)
 {
 	int sizeLess = m_size < v.m_size ? m_size : v.m_size;	// Вычисляем вектор с меньшей размерностью.
-	int sizeBigger = m_size > v.m_size ? m_size : v.m_size;		// Вычисляем вектор с большей размерностью.
+	int sizeBigger = m_size > v.m_size ? m_size : v.m_size;	// Вычисляем вектор с большей размерностью.
 	Vector result{ sizeBigger };
 	result.Clear();
 	for (int i = 0; i < sizeBigger; i++)
 		if (i >= sizeLess)
 		{
-			result[i] = (*(this->m_vect + i)) > (*(v.GetVect() + i)) ? (*(this->m_vect + i)) : (*(v.GetVect() + i)); // иногда копирует из мусора положительные числа.
+			result[i] = (*(this->m_vect + i)) > (*(v.GetVect() + i)) ? (*(this->m_vect + i)) : (*(v.GetVect() + i));
 		}
 		else
-			result[i] = *(this->m_vect + i) + *(v.GetVect() + i);
+			result[i] = *(this->m_vect + i) - *(v.GetVect() + i);
 
 	return result;
+}
 
+// Вычитание числа из вектора (из каждого компонента вектора вычитывается число).
+Vector Vector::operator-(int n)
+{
+	Vector result{ m_size };
+	result.Clear();
+	for (int i = 0; i < m_size; i++)
+		result[i] = (*(this->m_vect + i)) - n;
+	return result;
+}
 
+// Перегруженный оператор -= для вычитания двух векторов.
+Vector& Vector::operator-=(const Vector& v)
+{
+	return *this = this->operator-(v);
+}
 
+// Умножение векторов.
+Vector Vector::operator*(const Vector& v)
+{
+	int sizeLess = m_size < v.m_size ? m_size : v.m_size;	// Вычисляем вектор с меньшей размерностью.
+	int sizeBigger = m_size > v.m_size ? m_size : v.m_size;	// Вычисляем вектор с большей размерностью.
+	Vector result{ sizeBigger };
+	result.Clear();
+	for (int i = 0; i < sizeBigger; i++)
+		if (i >= sizeLess)
+		{
+			result[i] = (*(this->m_vect + i)) > (*(v.GetVect() + i)) ? (*(this->m_vect + i)) : (*(v.GetVect() + i));
+		}
+		else
+			result[i] = *(this->m_vect + i) * *(v.GetVect() + i);
 
+	return result;
+}
 
+// Умножение вектора на число (каждый компонент вектора умножается на число).
+Vector Vector::operator*(int n)
+{
+	Vector result{ m_size };
+	result.Clear();
+	for (int i = 0; i < m_size; i++)
+		result[i] = (*(this->m_vect + i)) * n;
+	return result;
+}
 
-
-
-
-
-	return Vector();
+// Перегруженный оператор *= для умножения вектора на число.
+Vector& Vector::operator*=(int n)
+{
+	return *this = this->operator*(n);
 }
 
 // Метод вывода на экран.
@@ -272,4 +309,25 @@ void Vector::Remove(int index)
 	delete[]m_vect;
 	m_vect = p;
 	p = nullptr;
+}
+
+// Перегруженный оператор >>. Ввод вектора с клавиатуры.
+istream& operator>>(istream& cin, Vector& v)
+{
+	cout << endl;
+	v.Clear();
+	for (int i = 0; i < v.m_size; i++)
+	{
+		cout << "vector[" << i << "] = ";
+		cin >> v.m_vect[i];
+	}
+	return cin;
+}
+
+// Перегруженный оператор <<. Вывод вектора на экран.
+ostream& operator<<(ostream& cout, Vector& v)
+{
+	cout << endl;
+	v.Print();
+	return cout;
 }

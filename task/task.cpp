@@ -31,8 +31,9 @@
 ################################################################################################
 		СТАТУС : Не готово.
 
-		ВОЗМОЖНЫЕ ДОРАБОТКИ:
-*
+		ДОРАБОТКИ:
+* // Конструтор переноса.	// Vector(Vector&& v);
+* // Перегруженный оператор присваивания с переносом.	// Vector& operator = (Vector&& v);
 		ИЗВЕСТНЫЕ ОШИБКИ:
 *
 		ПРОТЕСТИРОВАТЬ:
@@ -46,6 +47,7 @@
 #include <iostream>
 #include "Vector.h"
 using std::cout;
+using std::cin;
 using std::endl;
 using std::boolalpha;
 
@@ -53,7 +55,7 @@ int main()
 {
 	srand(time(0));
 	int size{ 5 };
-	int* arr = new int[size] {1, 2, 3, 4, 5}; // массив для инициализации
+	int* arr = new int[size] {1, 2, 3, 4, 5}; // Массив для инициализации.
 	for (int i = 0; i < size; i++)
 	{
 		cout << arr[i] << ' ';
@@ -278,7 +280,7 @@ int main()
 	cout << endl;
 
 	// Вычитание двух векторов.
-	Vector v18{ 10 };
+	Vector v18{ 7 };
 	v18.Input();
 	cout << "v18" << endl;
 	v18.Print();
@@ -292,16 +294,76 @@ int main()
 	v20.Print();
 	cout << endl;
 
-	// какая-то следующая перегрузка. Все выше готово
-	// Продолжить смотреть комент к видео с 02,16,10
+	// Вычитание числа из вектора (из каждого компонента вектора вычитывается число).
+	Vector v21{ 10 };
+	v21.Input();
+	cout << "v21" << endl;
+	v21.Print();
+	int number2{ 9 }; // Число для вычитания с компонентами вектора.
+	v21 = v21 - number;
+	cout << "v21 = v21 - number2(number2 = 9)" << endl;
+	v21.Print();
+	cout << endl;
 
+	// Перегруженный оператор -= для вычитания двух векторов.
+	Vector v22{ 7 };
+	v22.Input();
+	cout << "v22" << endl;
+	v22.Print();
+	Vector v23{ 10 };
+	v23.Input();
+	cout << "v23" << endl;
+	v23.Print();
+	v22 -= v23;
+	cout << "v22 -= v23" << endl;
+	v22.Print();
+	cout << endl;
 
+	// Умножение векторов.
+	Vector v24{ 7 };
+	v24.Input();
+	cout << "v24" << endl;
+	v24.Print();
+	Vector v25{ 10 };
+	v25.Input();
+	cout << "v25" << endl;
+	v25.Print();
+	Vector v26{ 10 };
+	v26 = v24 * v25;
+	cout << "v26 = v24 * v25" << endl;
+	v26.Print();
+	cout << endl;
 
+	// Умножение вектора на число (каждый компонент вектора умножается на число).
+	Vector v27{ 10 };
+	v27.Input();
+	cout << "v27" << endl;
+	v27.Print();
+	int number3{ 9 }; // Число для умножения с компонентами вектора.
+	v27 = v27 * number3;
+	cout << "v27 = v27 * number3(number3 = 9)" << endl;
+	v27.Print();
+	cout << endl;
 
+	// Перегруженный оператор *= для умножения вектора на число.
+	Vector v28{ 7 };
+	v28.Input();
+	cout << "v28" << endl;
+	v28.Print();
+	int number4{ 9 }; // Число для умножения с компонентами вектора.
+	v28 *= number4;
+	cout << "v28 *= number4(number4 = 9)" << endl;
+	v28.Print();
+	cout << endl;
 
+	// Перегруженный оператор >>. Ввод вектора с клавиатуры.
+	Vector v29{ 5 };
+	cout << "Enter vector:";
+	cin >> v29;
 
-
-
+	// Перегруженный оператор <<. Вывод вектора на экран.
+	cout << "v29"
+		<< v29;
 
 	delete[]arr;
 }
