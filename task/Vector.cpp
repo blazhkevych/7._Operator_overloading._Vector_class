@@ -111,7 +111,7 @@ Vector& Vector::operator=(Vector&& v)
 {
 	if (this == &v)
 		return *this;
-	delete m_vect;
+	delete[] m_vect;
 	m_vect = v.m_vect;
 	v.m_vect = nullptr;
 
